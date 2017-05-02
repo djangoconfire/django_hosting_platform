@@ -1,0 +1,68 @@
+from django.db import models
+from django.contrib.auth.models import User
+from base.models import (TimeStampedModel,)
+
+class ChallengeHostTeam(TimeStampedModel):
+	"""Model representing the host team for a particular challenge"""
+	team_name	=models.CharField(max_length=200, unique=True)
+	created_by	=models.ForeignKey(User,related_name="challenge_host_team_creator")
+
+	def __unicode__(self):
+		return "%s:%s" %(self.team_name,self.created_by)
+
+
+	class Meta:
+		app_label="hosts"
+		db_table="challenge_host_team"
+
+
+class ChallengeHost(TimeStampedModel):
+	#permission options
+	ADMIN='Admin'
+	READ='Read'
+	RESTRICTED='Restricted'
+	WRITE='Write'
+
+	# status options
+	ACCEPTED='Accepted'
+	DENIED='Denied'
+	PENDING='Pending'
+	SELF='Self'
+	UNKNOWN='Uknown'
+
+
+	PERMISSION_OPTIONS=(
+		(ADMIN,ADMIN),
+		(READ,READ),
+		(RESTRICTED,RESTRICTED),
+		(WRITE,WRITE),
+
+		)
+
+
+	STATUS_OPTIONS=(
+		(ACCEPTED,ACCEPTED),
+		(DENIED,DENIED),
+		(PENDING,PENDING),
+		(SELF,SELF),
+		(UNKNOWN,UNKNOWN),
+	)
+
+	user 		= models.ForeignKey(User)
+	team_name	= models.ForeignKey(ChallengeHostTeam)
+	status      = models.CharField(max_length=30,choices=STATUS_OPTIONS)
+	permissions = models.CharField(max_length=30,choices=PERMISSION_OPTIONS)
+
+	def __unicode__(self):
+		return "%s:%s:%s" %(self.team_name,self.user,self.permissions)
+
+
+	class Meta:
+		app_label='hosts'
+		db_table='challenge_host'	
+
+
+		
+	
+
+

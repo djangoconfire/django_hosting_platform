@@ -10,12 +10,13 @@ class Challenge(TimeStampedModel):
     terms_nd_conditions     = models.TextField(null=True,blank=True)
     submission_guidelines   = models.TextField(null=True,blank=True)
     evaluation_details      = models.TextField(null=True,blank=True)
+    creator                 = models.ForeignKey('hosts.ChallengeHostTeam', related_name='challenge_creator')
     image                   = models.ImageField(upload_to="logos",
                                                 null=True,blank=True,verbose_name="Logo")
     start_date              = models.DateTimeField(null=True,blank=True,verbose_name="start_date(UTC)")
     end_date                = models.DateTimeField(null=True,blank=True,verbose_name="end_date(UTC)")
     published               = models.BooleanField(default=False,verbose_name="Publicly Available")
-    enable_form             = models.BooleanField(default=False)
+    enable_forum            = models.BooleanField(default=False)
     anonymous_leaderboard   = models.BooleanField(default=False)
 
     class Meta:
